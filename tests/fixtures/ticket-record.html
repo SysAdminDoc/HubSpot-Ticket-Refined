@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Configure PACS destination | Ticket</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; margin: 0; font-family: Arial, sans-serif; color: #253746; }
+      body { overflow: hidden; background: #f4f6f8; }
+      button, input { font: inherit; }
+      [data-test-id="hs-global-toolbar"] { position: fixed; inset: 0 0 auto 0; z-index: 10; display: flex; align-items: center; gap: 18px; height: 44px; padding: 0 20px; background: #2e2e2e; color: white; }
+      [data-test-id="global-search-input-react"] { width: min(550px, 46vw); height: 32px; padding: 0 14px; border: 1px solid #8a8a8a; background: transparent; color: white; }
+      [data-test-id="hs-vertical-nav"] { position: fixed; inset: 44px auto 0 0; z-index: 9; width: var(--global-nav-vertical-nav-width, 236px); padding: 14px 12px; background: #303030; color: white; transition: width 160ms ease; }
+      [data-test-id="hs-vertical-nav"] a { display: block; margin-bottom: 6px; padding: 10px 12px; color: white; text-decoration: none; }
+      [data-test-id="hs-vertical-nav"] a[aria-current="page"] { background: #686868; }
+      .record-shell { position: fixed; inset: 44px 0 0 var(--global-nav-vertical-nav-width, 236px); padding: 12px; transition: left 160ms ease; }
+      #crm { display: flex; gap: 16px; height: 100%; }
+      #record-page-left-sidebar { flex: 0 0 300px; min-width: 300px; overflow: hidden auto; }
+      [data-test-id="records-right-sidebar"] { flex: 0 0 316px; min-width: 316px; overflow: hidden; }
+      [data-test-id="left-sidebar"], [data-test-id="right-sidebar"] { height: 100%; overflow: hidden auto; }
+      .middle { display: flex; flex: 1; min-width: 0; flex-direction: column; overflow: hidden; }
+      [data-test-id^="card-wrapper-"] { margin-bottom: 16px; }
+      [data-test-id^="card-wrapper-"] > div { padding: 20px; border: 1px solid #cdd4db; border-radius: 12px; background: white; }
+      [data-test-id="record-highlight-content"] { display: grid; gap: 12px; }
+      [data-test-id="highlight-record-label"] { font-size: 20px; line-height: 1.25; }
+      .properties { display: grid; gap: 14px; }
+      .property { display: grid; gap: 4px; }
+      .property label { color: #607080; font-size: 12px; }
+      .activity-actions { display: flex; gap: 10px; }
+      .activity-actions button { width: 38px; height: 38px; border: 1px solid #9ca7b1; background: white; }
+      [role="tablist"] { display: grid; grid-template-columns: 1fr 1fr; min-height: 50px; border: 1px solid #cbd2d9; background: white; }
+      [role="tab"] { border: 0; background: transparent; }
+      [role="tab"][aria-selected="true"] { border-bottom: 2px solid #33475b; }
+      .activity-toolbar { display: flex; align-items: center; gap: 10px; min-height: 104px; padding: 14px 8px; }
+      .activity-toolbar button, .activity-toolbar input { min-height: 34px; }
+      .activity-toolbar input { width: 210px; padding: 0 12px; }
+      [data-test-id="crm-events-viz-timeline"] { flex: 1; min-height: 0; overflow: hidden auto; padding: 0 8px 30px; }
+      [data-test-id="timeline-preview-event"] { margin-bottom: 10px; padding: 16px; border: 1px solid #cbd2d9; border-radius: 12px; background: white; box-shadow: 0 2px 6px rgb(0 0 0 / 8%); }
+      [data-test-id="timeline-note-event"] { background: #fff8e5; }
+      .event-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+      [data-test-id="event-timestamp"] { color: #697786; font-size: 12px; }
+      [data-test-id="preview-summary"] { padding: 16px; border: 1px solid #ff7a9f; border-radius: 10px; line-height: 1.5; }
+      .association { margin-top: 10px; padding: 12px; border: 1px solid #cbd2d9; border-radius: 10px; }
+    </style>
+  </head>
+  <body>
+    <header data-test-id="hs-global-toolbar"><strong>Support Workspace</strong><input data-test-id="global-search-input-react" aria-label="Global search" placeholder="Find or ask"><span>Operations</span></header>
+    <nav data-test-id="hs-vertical-nav" aria-label="Main navigation"><a href="#">Home</a><a href="#">CRM</a><a href="#" aria-current="page">Service</a><a href="#">Automation</a><a href="#">Reporting</a></nav>
+    <main class="record-shell">
+      <div id="crm">
+        <div id="record-page-left-sidebar">
+          <aside data-test-id="left-sidebar">
+            <div data-test-id="card-wrapper-OBJECT_HIGHLIGHT-FAS-0-5-1"><div><div data-test-id="record-highlight-content"><a href="#">Tickets</a><strong data-test-id="highlight-record-label">Configure PACS destination for Northside Clinic</strong><a href="#">View ticket in help desk</a><span>Create date: Sep 3, 2026</span><span>Status: Waiting on contact</span><div class="activity-actions"><button type="button"><span data-test-id="activity-button-icon-description">Note</span></button><button type="button"><span data-test-id="activity-button-icon-email">Email</span></button><button type="button"><span data-test-id="activity-button-icon-calling">Call</span></button><button type="button"><span data-test-id="activity-button-icon-tasks">Task</span></button></div></div></div></div>
+            <div data-test-id="card-wrapper-PROPERTIES_V3/0-5/0"><div><header><strong>About this ticket</strong></header><div data-test-id="crm-card-content" class="properties"><div class="property"><label>Ticket description</label><span>Configure a secure DICOM send destination for the new acquisition workstation.</span></div><div class="property"><label>Ticket owner</label><span>Support Team</span></div><div class="property"><label>Priority</label><span>High</span></div><div class="property"><label>Last customer reply</label><span>Sep 3, 2026 1:21 PM</span></div></div></div></div>
+          </aside>
+        </div>
+        <section class="middle" data-test-id="tab-1-content">
+          <div role="tablist" aria-label="Ticket record sections"><button type="button" role="tab" aria-selected="true">Overview</button><button type="button" role="tab" aria-selected="false">Activities</button></div>
+          <div class="activity-toolbar"><input aria-label="Search activities" placeholder="Search activities"><button type="button" data-test-id="timeline-tab-filter-activity">All activities</button><button type="button" data-test-id="timeline-tab-filter-emails">Emails</button><button type="button" data-test-id="timeline-tab-filter-tasks">Tasks</button></div>
+          <div data-test-id="card-wrapper-SINGLETON/0-5/RECORD_TIMELINE" style="display:contents">
+            <div data-test-id="crm-events-viz-timeline">
+              <article data-test-id="timeline-preview-event" data-kind="note"><div data-test-id="timeline-note-event"><div class="event-head"><strong>Internal note</strong><span data-test-id="event-timestamp">Today at 2:26 PM</span></div><div>Confirm the remote session time and validate a test study after configuration.</div></div></article>
+              <article data-test-id="timeline-preview-event"><div class="event-head"><strong>Outgoing email</strong><span data-test-id="event-timestamp">Today at 1:22 PM</span></div><div>Thanks for the connection details. The support team will send a proposed appointment time.</div></article>
+              <article data-test-id="timeline-preview-event"><div class="event-head"><strong>Incoming email</strong><span data-test-id="event-timestamp">Today at 1:21 PM</span></div><div>The destination host is available on the imaging VLAN. Please let us know what time works.</div></article>
+              <article data-test-id="timeline-preview-event"><div class="event-head"><strong>Outgoing email</strong><span data-test-id="event-timestamp">Aug 28 at 9:45 AM</span></div><div>Following up to schedule configuration of the new DICOM destination.</div></article>
+              <article data-test-id="timeline-preview-event"><div class="event-head"><strong>Call logged</strong><span data-test-id="event-timestamp">Aug 21 at 4:10 PM</span></div><div>Reviewed network details and confirmed the workstation is ready.</div></article>
+            </div>
+          </div>
+        </section>
+        <div data-test-id="records-right-sidebar"><aside data-test-id="right-sidebar">
+          <div data-test-id="card-wrapper-AI_OBJECT_SUMMARY-FAS-1"><div><header data-test-id="copilot-preview-v2-header"><strong>Record summary</strong></header><div data-test-id="preview-summary">This ticket covers a DICOM destination setup for a newly installed workstation. Network details are ready. The next step is scheduling remote access and sending a test study.</div></div></div>
+          <div data-test-id="card-wrapper-ASSOCIATION_V3/0-1"><div><header><strong>Contacts (1)</strong></header><div data-test-id="associated-objects-card-content-0-1"><div class="association"><strong>Jordan Lee</strong><div>Northside Clinic</div><div>Imaging Operations</div></div></div></div></div>
+          <div data-test-id="card-wrapper-ASSOCIATION_V3/0-2"><div><header><strong>Companies (1)</strong></header><div data-test-id="associated-objects-card-content-0-2"><div class="association"><strong>Northside Clinic</strong><div>Healthcare</div></div></div></div></div>
+        </aside></div>
+      </div>
+    </main>
+  </body>
+</html>
