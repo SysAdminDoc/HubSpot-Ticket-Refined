@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+.claude/
+CLAUDE.md
+CODEX_CHANGELOG.md
+ROADMAP.md
+design-qa.md
+*.bak
+*.log
+*.mhtml
+work/
+qa/
+*.md
+!README.md
+!CHANGELOG.md

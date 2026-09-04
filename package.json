@@ -1,0 +1,22 @@
+{
+  "name": "hubspot-ticket-refined",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A compact premium theme for HubSpot ticket lists and ticket records.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "capture": "node scripts/capture.mjs",
+    "check": "npm run lint && npm test && npm run build",
+    "lint": "eslint src scripts tests",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "eslint": "^9.35.0",
+    "globals": "^16.3.0",
+    "jsdom": "^26.1.0"
+  }
+}
