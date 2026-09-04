@@ -92,6 +92,15 @@ test("settings panel changes theme and persists the choice", async () => {
 
   assert.equal(trigger.title, "Open theme and layout settings");
   assert.equal(shadow.querySelector(".htr-reset").textContent, "Restore defaults");
+  assert.equal(
+    shadow.querySelector('[data-setting="navigation"]')
+      .parentElement.getAttribute("aria-describedby"),
+    "htr-navigation-hint",
+  );
+  assert.match(
+    shadow.querySelector("#htr-navigation-hint").textContent,
+    /follows HubSpot/,
+  );
 
   trigger.click();
   assert.equal(trigger.getAttribute("aria-expanded"), "true");
@@ -128,10 +137,65 @@ test("settings panel changes theme and persists the choice", async () => {
   dom.window.close();
 });
 
+test("current collapsed ticket list works without a rendered data well", async () => {
+  const { dom } = await loadFixture(
+    "tickets-list.html",
+    "https://app.hubspot.com/contacts/123/objects/0-5/views/456/list",
+    {
+      beforeScript(document) {
+        const dataWell = document.querySelector('[data-test-id="data-well"]');
+        const shell = document.createElement("div");
+        shell.innerHTML = '<div data-test-id="data-well-collapsible"></div>';
+        dataWell.replaceWith(shell);
+      },
+    },
+  );
+  const { document } = dom.window;
+
+  assert.ok(document.querySelector(".htr-list-stack"));
+  assert.ok(document.querySelector(".htr-list-datawell"));
+  assert.equal(document.documentElement.dataset.htrAnalyticsAvailable, "false");
+  assert.equal(
+    document.querySelector('[data-test-id="framework-data-table"]').dataset
+      .htrColumns,
+    "8",
+  );
+  assert.match(source, /data-htr-analytics-available="false"/);
+  assert.match(source, /--global-nav-vertical-nav-width:\s*64px/);
+  assert.doesNotMatch(source, /--htr-nav-width/);
+
+  dom.window.close();
+});
+
 test("ticket record activates the three-column treatment", async () => {
   const { dom } = await loadFixture(
     "ticket-record.html",
     "https://app.hubspot.com/contacts/123/record/0-5/789",
+    {
+      beforeScript(document) {
+        const title = document.querySelector(
+          '[data-test-id="highlight-record-label"]',
+        );
+        title.textContent =
+          "Configure a new DICOM destination after replacing the acquisition workstation and verify the first study reaches the archive";
+
+        const currentStatus = document.querySelector(
+          '[data-test-id^="highlight-property-display-hs_pipeline_stage"]',
+        );
+        currentStatus?.remove();
+        const status = document.createElement("div");
+        status.dataset.testId = "highlight-property-item-hs_pipeline_stage";
+        status.innerHTML =
+          '<span>Ticket status:</span><div data-test-id="property-input-hs_pipeline_stage"><span>Waiting on contact</span></div>';
+        title.parentElement.append(status);
+
+        const highlight = document.createElement("div");
+        highlight.dataset.testId = "crm-data-highlights-item";
+        highlight.innerHTML =
+          '<p>Ticket status</p><span>Waiting on contact (Support Pipeline)</span>';
+        document.querySelector(".middle").append(highlight);
+      },
+    },
   );
   const { document } = dom.window;
 
@@ -147,6 +211,27 @@ test("ticket record activates the three-column treatment", async () => {
   assert.match(source, /:focus-visible/);
   assert.match(source, /\[data-test-id="mini-highlight-container"\]/);
   assert.match(source, /background-image: none/);
+  assert.match(
+    source,
+    /data-htr-view="record"\] \[class\*="Overhang__StyledOverhang-"\]/,
+  );
+  assert.match(source, /data-test-id\^="timeline-scroll-fade-"/);
+  assert.match(source, /ButtonLabel__StyledLabel-/);
+  assert.match(source, /CollapsibleListCardFormatter__DragGripTarget-/);
+  const title = document.querySelector('[data-test-id="highlight-record-label"]');
+  assert.equal(title.dataset.htrLongTitle, "true");
+  assert.equal(title.title, title.textContent);
+  assert.equal(
+    document.querySelector(
+      '[data-test-id="property-input-hs_pipeline_stage"] span',
+    ).dataset.htrTone,
+    "waiting-contact",
+  );
+  assert.equal(
+    document.querySelector('[data-test-id="crm-data-highlights-item"] span')
+      .dataset.htrTone,
+    "waiting-contact",
+  );
 
   dom.window.close();
 });
@@ -185,7 +270,7 @@ test("theme tokens meet text contrast and radius rules", () => {
   assert.doesNotMatch(source, /(?:linear|radial)-gradient/);
 });
 
-async function loadFixture(name, url) {
+async function loadFixture(name, url, options = {}) {
   const html = await readFile(
     path.join(projectRoot, "tests", "fixtures", name),
     "utf8",
@@ -211,6 +296,7 @@ async function loadFixture(name, url) {
   window.GM_getValue = (key, fallback) => store.get(key) ?? fallback;
   window.GM_setValue = (key, value) => store.set(key, structuredClone(value));
   window.GM_registerMenuCommand = () => {};
+  options.beforeScript?.(window.document);
   window.eval(source);
   await new Promise((resolve) => window.setTimeout(resolve, 180));
   return { dom, store };
