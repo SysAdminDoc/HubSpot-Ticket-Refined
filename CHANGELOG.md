@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 (2026-09-03)
+
+- Updated the ticket list for HubSpot's current five-column layout and optional analytics shelf.
+- Removed the empty navigation rail, misplaced toolbar, white edge fades, and clipped card headings found during live testing.
+- Fitted more useful title space into the queue while keeping status, owner, and create date easy to scan.
+- Long record titles now show a six-line summary with the full text available on hover.
+- Improved record labels, quick actions, status badges, association cards, and timeline content in both color modes.
+- Added fixture coverage for the collapsed list state and HubSpot's current record status markup.
+
 ## 0.2.0 (2026-09-03)
 
 - Reworked the list page around a single overview band, compact command area, and stronger table hierarchy.

@@ -1,6 +1,6 @@
 # HubSpot Ticket Refined
 
-![Version](https://img.shields.io/badge/version-0.2.0-087b76)
+![Version](https://img.shields.io/badge/version-0.3.0-087b76)
 ![License](https://img.shields.io/badge/license-MIT-2563eb)
 ![Platform](https://img.shields.io/badge/platform-Tampermonkey-111827)
 
@@ -12,12 +12,13 @@ HubSpot Ticket Refined turns HubSpot's ticket list and ticket record pages into 
 
 ## What changes
 
-- Keeps 18 to 22 ticket rows visible on a typical desktop with compact density.
+- Shows roughly 22 ticket rows at 1742 x 984 with compact density.
 - Turns queue metrics into one restrained overview band so the table stays dominant.
 - Refines ticket records into a focused details rail, activity timeline, and context rail.
 - Includes Midnight, Porcelain, and automatic color modes.
 - Keeps the analytics shelf available in compact, full, or hidden form.
-- Uses stable HubSpot test hooks instead of generated class names where possible.
+- Adapts when HubSpot collapses or removes the analytics shelf, without leaving a blank band.
+- Preserves long ticket titles with a six-line summary and a full hover tooltip.
 - Adds clear hover, focus, selected, loading, disabled, and semantic status treatments.
 
 The script runs only on HubSpot ticket list and ticket record URLs. It checks visible status and priority labels to style rows, but it doesn't transmit or persist ticket content. Your preferences stay in the userscript manager's local storage.

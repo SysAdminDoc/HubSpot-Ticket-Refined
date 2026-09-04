@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HubSpot Ticket Refined
 // @namespace    https://github.com/SysAdminDoc/HubSpot-Ticket-Refined
-// @version      0.2.0
+// @version      0.3.0
 // @description  A premium, information-dense theme for HubSpot ticket workspaces.
 // @author       SysAdminDoc
 // @license      MIT
@@ -23,7 +23,7 @@
 (function hubSpotTicketRefined() {
   "use strict";
 
-  const VERSION = "0.2.0";
+  const VERSION = "0.3.0";
   const STORAGE_KEY = "hubspot-ticket-refined.settings";
   const ROOT_CLASS = "htr-active";
   const CONTROL_ID = "htr-control-root";
