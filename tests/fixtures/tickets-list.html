@@ -33,9 +33,13 @@
       table { width: 100%; border-collapse: collapse; table-layout: fixed; }
       th, td { height: 40px; padding: 0 12px; border-bottom: 1px solid #d8dde3; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       th:first-child, td:first-child { width: 46px; text-align: center; }
-      th:nth-child(2) { width: 48%; }
-      th:nth-child(3) { width: 19%; }
-      th:nth-child(4) { width: 22%; }
+      th:nth-child(2) { width: 26%; }
+      th:nth-child(3) { width: 11%; }
+      th:nth-child(4) { width: 7%; }
+      th:nth-child(5) { width: 11%; }
+      th:nth-child(6) { width: 10%; }
+      th:nth-child(7) { width: 14%; }
+      th:nth-child(8) { width: 14%; }
       th { background: white; font-size: 12px; }
       td a { color: #006b73; font-weight: 600; text-decoration: none; }
       [data-test-id="table-paginator"] { display: flex; align-items: center; justify-content: center; height: 48px; gap: 18px; }
@@ -62,7 +66,7 @@
       <section class="page-card">
         <header class="titlebar" role="banner">
           <h1>Tickets</h1>
-          <button type="button" style="background:#ff7a59;color:#fff;border-color:#ff7a59">Add tickets</button>
+          <button type="button" data-test-id="add-objects-button">Add tickets</button>
         </header>
         <div data-test-id="view-tabs-container-lite">
           <div data-test-id="view-tab-menu">Support Queue</div>
@@ -93,7 +97,7 @@
         <div data-test-id="framework-data-table-container">
           <div data-test-id="fdt-scroll-window">
             <table data-test-id="framework-data-table">
-              <thead><tr><th><input type="checkbox" aria-label="Select all tickets"></th><th>Ticket name</th><th>Create date</th><th>Ticket status</th><th>Owner</th></tr></thead>
+              <thead><tr><th><input type="checkbox" aria-label="Select all tickets"></th><th>Ticket name</th><th>Status</th><th>Priority</th><th>Company</th><th>Owner</th><th>Create date</th><th>Last activity date</th></tr></thead>
               <tbody id="ticket-rows"></tbody>
             </table>
           </div>
@@ -114,12 +118,14 @@
         "Detector reports intermittent connection",
       ];
       const statuses = ["Waiting on us", "Waiting on contact", "Closed", "Open"];
+      const priorities = ["High", "Medium", "Low", "High"];
+      const companies = ["Northside Clinic", "Northside Clinic", "Lakeside Imaging", "Riverside Hospital"];
       const body = document.getElementById("ticket-rows");
       for (let index = 0; index < 30; index += 1) {
         const id = 1000 + index;
         const row = document.createElement("tr");
         row.dataset.testId = `row-${id}`;
-        row.innerHTML = `<td><input type="checkbox" aria-label="Select ticket ${id}"></td><td data-test-id="cell-0-5-subject-${id}"><a href="#">${subjects[index % subjects.length]}</a></td><td data-test-id="cell-0-5-createdate-${id}">Sep ${3 - (index % 3)}, 2026 ${8 + (index % 9)}:15 AM</td><td data-test-id="cell-0-5-hs_pipeline_stage-${id}">${statuses[index % statuses.length]}</td><td data-test-id="cell-0-5-hubspot_owner_id-${id}">Support Team</td>`;
+        row.innerHTML = `<td><input type="checkbox" aria-label="Select ticket ${id}"></td><td data-test-id="cell-0-5-subject-${id}"><a href="#">${subjects[index % subjects.length]}</a></td><td data-test-id="cell-0-5-hs_pipeline_stage-${id}"><span data-test-id="label-cell-formatted-property-status-${id}">${statuses[index % statuses.length]}</span></td><td data-test-id="cell-0-5-hs_ticket_priority-${id}"><span data-test-id="label-cell-formatted-property-priority-${id}">${priorities[index % priorities.length]}</span></td><td data-test-id="cell-0-5-associated-company-${id}">${companies[index % companies.length]}</td><td data-test-id="cell-0-5-hubspot_owner_id-${id}">Support Team</td><td data-test-id="cell-0-5-createdate-${id}">Sep ${3 - (index % 3)}, 2026 ${8 + (index % 9)}:15 AM</td><td data-test-id="cell-0-5-lastactivitydate-${id}">Sep ${3 - (index % 3)}, 2026 ${8 + (index % 9)}:42 AM</td>`;
         body.append(row);
       }
     </script>

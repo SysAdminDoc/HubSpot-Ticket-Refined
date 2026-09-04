@@ -63,6 +63,15 @@ try {
   const port = await readDevToolsPort(profileDir);
   const target = await findPageTarget(port, inputUrl);
   cdp = await connectCdp(target.webSocketDebuggerUrl);
+  let consoleErrorCount = 0;
+  cdp.on("Runtime.exceptionThrown", () => {
+    consoleErrorCount += 1;
+  });
+  cdp.on("Runtime.consoleAPICalled", (event) => {
+    if (event.type === "error" || event.type === "assert") {
+      consoleErrorCount += 1;
+    }
+  });
   await cdp.send("Page.enable");
   await cdp.send("Runtime.enable");
   await cdp.send("Emulation.setDeviceMetricsOverride", {
@@ -115,6 +124,7 @@ ${script}
     });
   }
   await delay(450);
+  await waitForRefined(cdp);
   const metricsResult = await cdp.send("Runtime.evaluate", {
     expression: `(() => {
       const rect = (selector) => {
@@ -135,8 +145,28 @@ ${script}
           height: box.height,
           background: style.backgroundColor,
           color: style.color,
+          display: style.display,
+          padding: style.padding,
+          margin: style.margin,
+          borderRadius: style.borderRadius,
+          overflow: style.overflow,
+          order: style.order,
         };
       };
+      const inspectAll = (selector) => [...document.querySelectorAll(selector)].map((node) => {
+        const box = node.getBoundingClientRect();
+        const style = getComputedStyle(node);
+        return {
+          x: box.x,
+          y: box.y,
+          width: box.width,
+          height: box.height,
+          padding: style.padding,
+          margin: style.margin,
+          borderRadius: style.borderRadius,
+          overflow: style.overflow,
+        };
+      });
       const rows = [...document.querySelectorAll('[data-test-id="framework-data-table"] tbody tr')];
       const visibleRows = rows.filter((row) => {
         const box = row.getBoundingClientRect();
@@ -161,6 +191,15 @@ ${script}
         rightSidebar: rect('[data-test-id="records-right-sidebar"]'),
         controlPresent: Boolean(document.getElementById("htr-control-root")),
         panelOpen: document.getElementById("htr-control-root")?.dataset.open === "true",
+        semanticTokens: document.querySelectorAll("[data-htr-tone]").length,
+        listLayout: {
+          shell: inspect(".htr-list-shell"),
+          stack: inspect(".htr-list-stack"),
+          layers: inspectAll(".htr-list-shell-layer"),
+          datawell: inspect(".htr-list-datawell"),
+          toolbar: inspect(".htr-list-toolbar"),
+          table: inspect(".htr-list-table"),
+        },
         chrome: {
           toolbarRoot: inspect('#hs-global-toolbar-root'),
           toolbar: inspect('[data-test-id="hs-global-toolbar"]'),
@@ -168,6 +207,9 @@ ${script}
           verticalNav: inspect('[data-test-id="hs-vertical-nav"]'),
           verticalNavContent: inspect('[data-test-id="hs-vertical-nav-content"]'),
           verticalNavScrollArea: inspect('[data-test-id="scrollable-pane-scroll-area"]'),
+          highlightedNavItem: inspect('[data-test-id="hs-vertical-nav"] .primary-nav-menu-item.isHighlighted'),
+          highlightedNavControl: inspect('[data-test-id="hs-vertical-nav"] .primary-nav-menu-item.isHighlighted > :is(a, button)'),
+          highlightedNavLayout: inspect('[data-test-id="hs-vertical-nav"] .primary-nav-menu-item.isHighlighted > :is(a, button) > :first-child'),
           timelineFilter: inspect('[data-selenium-test="timeline-filter-container"] button'),
         },
       };
@@ -175,6 +217,7 @@ ${script}
     returnByValue: true,
   });
   const metrics = metricsResult.result.value;
+  metrics.consoleErrorCount = consoleErrorCount;
 
   const screenshot = await cdp.send("Page.captureScreenshot", {
     format: "png",
@@ -308,9 +351,16 @@ function connectCdp(url) {
       () => {
         let nextId = 1;
         const pending = new Map();
+        const handlers = new Map();
         socket.addEventListener("message", (event) => {
           const message = JSON.parse(event.data);
-          if (!message.id || !pending.has(message.id)) {
+          if (!message.id) {
+            for (const listener of handlers.get(message.method) || []) {
+              listener(message.params || {});
+            }
+            return;
+          }
+          if (!pending.has(message.id)) {
             return;
           }
           const callbacks = pending.get(message.id);
@@ -332,6 +382,11 @@ function connectCdp(url) {
           },
           close() {
             socket.close();
+          },
+          on(method, listener) {
+            const listeners = handlers.get(method) || [];
+            listeners.push(listener);
+            handlers.set(method, listeners);
           },
         });
       },

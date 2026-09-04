@@ -1,10 +1,10 @@
 # HubSpot Ticket Refined
 
-![Version](https://img.shields.io/badge/version-0.1.0-0f766e)
+![Version](https://img.shields.io/badge/version-0.2.0-087b76)
 ![License](https://img.shields.io/badge/license-MIT-2563eb)
 ![Platform](https://img.shields.io/badge/platform-Tampermonkey-111827)
 
-HubSpot Ticket Refined gives the ticket list and ticket record pages a calmer, denser workspace. It keeps HubSpot's controls and data intact while reducing wasted space, clarifying status, and making long work sessions easier on the eyes.
+HubSpot Ticket Refined turns HubSpot's ticket list and ticket record pages into a calmer, denser workspace. It keeps the existing controls and data intact while sharpening hierarchy, reducing wasted space, and making long support sessions easier on the eyes.
 
 ![HubSpot Ticket Refined ticket list](assets/ticket-list-light.png)
 
@@ -12,12 +12,13 @@ HubSpot Ticket Refined gives the ticket list and ticket record pages a calmer, d
 
 ## What changes
 
-- Fits more ticket rows on screen with compact or comfortable density.
-- Refines ticket records across the left details, activity timeline, and right associations column.
+- Keeps 18 to 22 ticket rows visible on a typical desktop with compact density.
+- Turns queue metrics into one restrained overview band so the table stays dominant.
+- Refines ticket records into a focused details rail, activity timeline, and context rail.
 - Includes Midnight, Porcelain, and automatic color modes.
 - Keeps the analytics shelf available in compact, full, or hidden form.
 - Uses stable HubSpot test hooks instead of generated class names where possible.
-- Adds clear hover, focus, selected, loading, and status treatments.
+- Adds clear hover, focus, selected, loading, disabled, and semantic status treatments.
 
 The script runs only on HubSpot ticket list and ticket record URLs. It checks visible status and priority labels to style rows, but it doesn't transmit or persist ticket content. Your preferences stay in the userscript manager's local storage.
 

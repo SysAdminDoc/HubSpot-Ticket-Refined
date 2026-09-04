@@ -50,6 +50,19 @@ test("ticket list activates compact styling and semantic row status", async () =
   assert.equal(firstRow.dataset.htrStatus, "waiting-us");
   assert.equal(secondRow.dataset.htrStatus, "waiting-contact");
   assert.equal(thirdRow.dataset.htrStatus, "closed");
+  assert.equal(firstRow.dataset.htrPriority, "high");
+  assert.equal(
+    firstRow.querySelector('[data-test-id^="label-cell-formatted-property-status-"]').dataset.htrTone,
+    "waiting-us",
+  );
+  assert.equal(
+    firstRow.querySelector('[data-test-id^="label-cell-formatted-property-priority-"]').dataset.htrTone,
+    "high",
+  );
+  assert.ok(document.querySelector(".htr-list-stack"));
+  assert.ok(document.querySelector(".htr-list-datawell"));
+  assert.ok(document.querySelector(".htr-list-toolbar"));
+  assert.ok(document.querySelector(".htr-list-table"));
   assert.equal(store.size, 0);
 
   dom.window.close();
@@ -67,6 +80,18 @@ test("settings panel changes theme and persists the choice", async () => {
   const light = shadow.querySelector(
     'button[data-setting="theme"][data-value="light"]',
   );
+  const comfortable = shadow.querySelector(
+    'button[data-setting="density"][data-value="comfortable"]',
+  );
+  const hiddenAnalytics = shadow.querySelector(
+    'button[data-setting="analytics"][data-value="hidden"]',
+  );
+  const standardNavigation = shadow.querySelector(
+    'button[data-setting="navigation"][data-value="standard"]',
+  );
+
+  assert.equal(trigger.title, "Open theme and layout settings");
+  assert.equal(shadow.querySelector(".htr-reset").textContent, "Restore defaults");
 
   trigger.click();
   assert.equal(trigger.getAttribute("aria-expanded"), "true");
@@ -79,6 +104,19 @@ test("settings panel changes theme and persists the choice", async () => {
     store.get("hubspot-ticket-refined.settings").theme,
     "light",
   );
+
+  comfortable.click();
+  hiddenAnalytics.click();
+  standardNavigation.click();
+  assert.equal(document.documentElement.dataset.htrDensity, "comfortable");
+  assert.equal(document.documentElement.dataset.htrAnalytics, "hidden");
+  assert.equal(document.documentElement.dataset.htrNavigation, "standard");
+  assert.deepEqual(store.get("hubspot-ticket-refined.settings"), {
+    theme: "light",
+    density: "comfortable",
+    analytics: "hidden",
+    navigation: "standard",
+  });
 
   const controls = [...shadow.querySelectorAll("button")];
   assert.ok(controls.every((button) => button.type === "button"));
@@ -103,8 +141,12 @@ test("ticket record activates the three-column treatment", async () => {
   assert.ok(document.querySelector('[data-test-id="records-right-sidebar"]'));
   assert.match(source, /#record-page-left-sidebar/);
   assert.match(source, /\[data-test-id="timeline-preview-event"\]/);
+  assert.match(source, /SanitizedText__StyledText-/);
   assert.match(source, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.match(source, /@media \(forced-colors: active\)/);
   assert.match(source, /:focus-visible/);
+  assert.match(source, /\[data-test-id="mini-highlight-container"\]/);
+  assert.match(source, /background-image: none/);
 
   dom.window.close();
 });
@@ -119,11 +161,17 @@ test("host selectors avoid captured generated class suffixes", () => {
 
 test("theme tokens meet text contrast and radius rules", () => {
   const pairs = [
-    ["#edf3f8", "#111a27"],
-    ["#9cabbc", "#111a27"],
-    ["#1f2937", "#ffffff"],
-    ["#5f6c7b", "#ffffff"],
-    ["#f8fafc", "#111827"],
+    ["#dce6f0", "#0f1d2c"],
+    ["#a8b6c5", "#0f1d2c"],
+    ["#8293a6", "#0f1d2c"],
+    ["#243348", "#ffffff"],
+    ["#586a7f", "#ffffff"],
+    ["#64748b", "#ffffff"],
+    ["#f8fbff", "#0b1726"],
+    ["#dbe5ee", "#102238"],
+    ["#67e4d7", "#153a47"],
+    ["#925800", "#fff3dc"],
+    ["#2567a9", "#e6f1fb"],
   ];
 
   for (const [foreground, background] of pairs) {
@@ -134,6 +182,7 @@ test("theme tokens meet text contrast and radius rules", () => {
   }
 
   assert.doesNotMatch(source, /border-radius:\s*(?:50%|999(?:px|rem)?)/);
+  assert.doesNotMatch(source, /(?:linear|radial)-gradient/);
 });
 
 async function loadFixture(name, url) {

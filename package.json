@@ -1,8 +1,8 @@
 {
   "name": "hubspot-ticket-refined",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "A compact premium theme for HubSpot ticket lists and ticket records.",
+  "description": "A premium, information-dense theme for HubSpot ticket workspaces.",
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
