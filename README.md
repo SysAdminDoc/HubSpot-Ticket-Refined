@@ -4,6 +4,16 @@
 ![License](https://img.shields.io/badge/license-MIT-2563eb)
 ![Platform](https://img.shields.io/badge/platform-Tampermonkey-111827)
 
+<p align="center">
+  <a href="https://ko-fi.com/X8K126YVER">
+    <img height="42" src="https://storage.ko-fi.com/cdn/kofi2.png?v=3" alt="Buy me a coffee on Ko-fi" />
+  </a>
+</p>
+
+<p align="center">
+  <sub><em>If this project helps you, a coffee helps me keep working on it.</em></sub>
+</p>
+
 HubSpot Ticket Refined turns HubSpot's ticket list and ticket record pages into a calmer, denser workspace. It keeps the existing controls and data intact while sharpening hierarchy, reducing wasted space, and making long support sessions easier on the eyes.
 
 ![HubSpot Ticket Refined ticket list](assets/ticket-list-light.png)
